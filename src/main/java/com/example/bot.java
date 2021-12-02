@@ -58,6 +58,7 @@ import com.vdurmont.emoji.EmojiParser;
 
 public class bot extends TelegramLongPollingBot {
     private String money_emoji = EmojiParser.parseToUnicode("💰");
+    private String stopwatch_emoji = EmojiParser.parseToUnicode("⏱️");
     private boolean EntryOrExit;
 
     @Override
@@ -378,7 +379,7 @@ public class bot extends TelegramLongPollingBot {
                     @Override
                     public void run() {
                         if(EntryOrExit) {
-                        Message.setText("****Waiting for the next hour****");
+                        Message.setText(stopwatch_emoji+"****Waiting for the next hour****"+stopwatch_emoji);
                         System.out.println(endIndex);
                         if (strategy.shouldEnter(endIndex)) {
                             // Our strategy should enter
