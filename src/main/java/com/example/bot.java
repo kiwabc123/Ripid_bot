@@ -218,7 +218,7 @@ public class bot extends TelegramLongPollingBot {
             } else if (data.equals("analysis_btc")) {
 
                 BarSeries series = new BuildBarSeries().buildAndAddData();
-                Strategy strategy = analysis.createtrategy(series);
+                Strategy strategy = analysis.createstrategy(series);
                 BarSeriesManager seriesManager = new BarSeriesManager(series);
                 TradingRecord tradingRecord = seriesManager.run(strategy, Trade.TradeType.BUY,
                         DecimalNum.valueOf(50));
@@ -287,7 +287,7 @@ public class bot extends TelegramLongPollingBot {
                 Message.setChatId(chatId.getChatId().toString());
 
                 BarSeries series = new BuildBarSeries().buildAndAddData();
-                Strategy strategy = analysis.createtrategy(series);
+                Strategy strategy = analysis.createstrategy(series);
                 TradingRecord tradingRecord = new BaseTradingRecord();
 
                 for (int i = 0; i < series.getBarCount(); i++) {
@@ -369,7 +369,7 @@ public class bot extends TelegramLongPollingBot {
                 Message.setChatId(chatId.getChatId().toString());
 
                 BarSeries series = new BuildBarSeries().buildAndAddData();
-                Strategy strategy = analysis.createtrategy(series);
+                Strategy strategy = analysis.createstrategy(series);
                 TradingRecord tradingRecord = new BaseTradingRecord();
                 Bar newBar = series.getLastBar();
                 int endIndex = series.getEndIndex();

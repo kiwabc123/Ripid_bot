@@ -39,7 +39,7 @@ public class analysis {
     public static void main(String[] args) throws InterruptedException {
         BarSeries series = new BuildBarSeries().buildAndAddData();
         
-        Strategy strategy = createtrategy(series);
+        Strategy strategy = createstrategy(series);
         BarSeriesManager seriesManager = new BarSeriesManager(series);
         TradingRecord tradingRecord = seriesManager.run(strategy, Trade.TradeType.BUY,
                 DecimalNum.valueOf(100));
@@ -75,7 +75,7 @@ public class analysis {
         return ZonedDateTime.of(2018, 01, day, 12, 0, 0, 0, ZoneId.systemDefault());
     }
 
-    public static Strategy createtrategy(BarSeries series) {
+    public static Strategy createstrategy(BarSeries series) {
 
         ClosePriceIndicator closePrice = new ClosePriceIndicator(series);
    
