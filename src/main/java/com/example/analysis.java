@@ -42,7 +42,7 @@ public class analysis {
         Strategy strategy = createtrategy(series);
         BarSeriesManager seriesManager = new BarSeriesManager(series);
         TradingRecord tradingRecord = seriesManager.run(strategy, Trade.TradeType.BUY,
-                DecimalNum.valueOf(50));
+                DecimalNum.valueOf(100));
         System.out.println(tradingRecord);
 
         AnalysisCriterion criterion = new GrossReturnCriterion();
@@ -81,7 +81,9 @@ public class analysis {
    
 
         MACDIndicator macd = new MACDIndicator(closePrice, 12, 26);
-        ;
+        
+    
+
         RSIIndicator RSI = new RSIIndicator(closePrice, 14);
         EMAIndicator signal = new EMAIndicator(macd, 9);
 

@@ -80,7 +80,7 @@ public class BuildBarSeries {
         BarSeries series = new BaseBarSeriesBuilder().withName("mySeries").build();
         //801A1124-8B21-4690-8C36-A85D3D892325
         //48A0C81A-3E04-4916-A388-ECD3B991C3DC
- REST_methods rest = new REST_methods("48A0C81A-3E04-4916-A388-ECD3B991C3DC");
+ REST_methods rest = new REST_methods("B29D27FF-44C9-4765-AA16-9245A79AAD07");
 
         // ZonedDateTime endTime = ZonedDateTime.now();
        
@@ -126,7 +126,8 @@ public class BuildBarSeries {
         BarSeries series = new BaseBarSeriesBuilder().withName("mySeries").build();
         //801A1124-8B21-4690-8C36-A85D3D892325
         //48A0C81A-3E04-4916-A388-ECD3B991C3DC
- REST_methods rest = new REST_methods("48A0C81A-3E04-4916-A388-ECD3B991C3DC");
+        //BFBD2EF4-F9AA-4ABC-9386-59562D4EFCF2
+ REST_methods rest = new REST_methods("801A1124-8B21-4690-8C36-A85D3D892325");
 
         // ZonedDateTime endTime = ZonedDateTime.now();
        

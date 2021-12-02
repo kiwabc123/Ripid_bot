@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 
-
-
 import org.ta4j.core.AnalysisCriterion;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
@@ -52,12 +50,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import com.vdurmont.emoji.EmojiParser;
 
 public class bot extends TelegramLongPollingBot {
     private String money_emoji = EmojiParser.parseToUnicode("💰");
+    private boolean EntryOrExit;
+
     @Override
     public void onUpdateReceived(Update update) {
         // TODO Auto-generated method stub
@@ -72,7 +74,7 @@ public class bot extends TelegramLongPollingBot {
 
                 InputFile file = new InputFile("https://t.me/AnimatedStickers/462");
                 SendSticker sticker = new SendSticker(chatId, file);
-         
+
                 // inline
                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> inlineButtons = new ArrayList<>();
@@ -98,6 +100,11 @@ public class bot extends TelegramLongPollingBot {
                     e1.printStackTrace();
                 }
 
+            } else if (update.getMessage().getText().equals("/stop")) {
+
+              
+                EntryOrExit = false;
+                System.out.println("stopppppp");
             }
 
         } else if (update.hasCallbackQuery()) {
@@ -108,9 +115,9 @@ public class bot extends TelegramLongPollingBot {
             SendMessage info2 = new SendMessage();
             info.setChatId(chatId.getChatId().toString());
             info2.setChatId(chatId.getChatId().toString());
-            
+
             InputFile file = new InputFile("https://t.me/AnimatedStickers/325");
-            SendSticker sticker2 = new SendSticker(chatId.getChatId().toString(),file);
+            SendSticker sticker2 = new SendSticker(chatId.getChatId().toString(), file);
 
             // BTC button
             if (data.equals("But1")) {
@@ -118,10 +125,9 @@ public class bot extends TelegramLongPollingBot {
                 System.out.println("user " + update.getCallbackQuery().getFrom().getUserName());
                 try {
 
-                    REST_methods rest = new REST_methods("801A1124-8B21-4690-8C36-A85D3D892325");
-                    String text2=null;
+                    REST_methods rest = new REST_methods("B29D27FF-44C9-4765-AA16-9245A79AAD07");
+                    String text2 = null;
 
-                    
                     info.setText("*BTC  /  USD*");
                     info.enableMarkdown(true);
 
@@ -164,10 +170,9 @@ public class bot extends TelegramLongPollingBot {
             } else if (data.equals("But2")) {
                 try {
 
-                    REST_methods rest = new REST_methods("801A1124-8B21-4690-8C36-A85D3D892325");
-                    String text2=null;
+                    REST_methods rest = new REST_methods("B29D27FF-44C9-4765-AA16-9245A79AAD07");
+                    String text2 = null;
 
-                    
                     info.setText("*ETH  /  USD*");
                     info.enableMarkdown(true);
 
@@ -189,7 +194,7 @@ public class bot extends TelegramLongPollingBot {
                     InlineKeyboardButton Button2 = new InlineKeyboardButton();
                     Button1.setText("Analysis");
                     Button2.setText("Back");
-                    Button1.setCallbackData("analysiseth");
+                    Button1.setCallbackData("analysis_eth");
                     Button2.setCallbackData("back");
                     inlineKeyboardButtonlist.add(Button1);
                     inlineKeyboardButtonlist.add(Button2);
@@ -199,7 +204,7 @@ public class bot extends TelegramLongPollingBot {
                     info.setReplyMarkup(inlineKeyboardMarkup);
                     execute(info);
                     execute(info2);
-   } catch (IOException e) {
+                } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (TelegramApiException e) {
@@ -209,7 +214,7 @@ public class bot extends TelegramLongPollingBot {
 
             } else if (data.equals("back")) {
 
-            } else if (data.equals("analysisbtc")) {
+            } else if (data.equals("analysis_btc")) {
 
                 BarSeries series = new BuildBarSeries().buildAndAddData();
                 Strategy strategy = analysis.createtrategy(series);
@@ -217,12 +222,8 @@ public class bot extends TelegramLongPollingBot {
                 TradingRecord tradingRecord = seriesManager.run(strategy, Trade.TradeType.BUY,
                         DecimalNum.valueOf(50));
                 System.out.println(tradingRecord);
-            
-                
-              
 
-
-                //analysis
+                // analysis
                 AnalysisCriterion criterion = new GrossReturnCriterion();
                 Num calculate3DaySma = criterion.calculate(series, tradingRecord);
 
@@ -244,34 +245,32 @@ public class bot extends TelegramLongPollingBot {
                 AnalysisCriterion vsBuyAndHold = new VersusBuyAndHoldCriterion(new GrossReturnCriterion());
                 text4 = ("Our return vs buy-and-hold return: \n" + vsBuyAndHold.calculate(series, tradingRecord));
 
-                System.out.println(text1+"\n"+text2+"\n \n"+text3+"\n \n"+text4);
+                System.out.println(text1 + "\n" + text2 + "\n \n" + text3 + "\n \n" + text4);
                 SendMessage ananlize = new SendMessage();
-                 SendMessage header = new SendMessage();
-                 header.setChatId(chatId.getChatId().toString());
-                 header.setText("*Analiysis for BTC *");
+                SendMessage header = new SendMessage();
+                header.setChatId(chatId.getChatId().toString());
+                header.setText("*Analiysis for BTC *");
 
                 ananlize.setChatId(chatId.getChatId().toString());
-                ananlize.setText(text1+"\n"+text2+"\n"+text3+"\n"+text4);
+                ananlize.setText(text1 + "\n" + text2 + "\n" + text3 + "\n" + text4);
                 header.enableMarkdown(true);
 
-                  // inline
-                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                    List<List<InlineKeyboardButton>> inlineButtons = new ArrayList<>();
-                    List<InlineKeyboardButton> inlineKeyboardButtonlist = new ArrayList<>();
-                    InlineKeyboardButton Button1 = new InlineKeyboardButton();
-                    InlineKeyboardButton Button2 = new InlineKeyboardButton();
-                    Button1.setText("Trade");
-                    Button2.setText("Back");
-                    Button1.setCallbackData("trade");
-                    Button2.setCallbackData("back");
-                    inlineKeyboardButtonlist.add(Button1);
-                    inlineKeyboardButtonlist.add(Button2);
+                // inline
+                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> inlineButtons = new ArrayList<>();
+                List<InlineKeyboardButton> inlineKeyboardButtonlist = new ArrayList<>();
+                InlineKeyboardButton Button1 = new InlineKeyboardButton();
+                InlineKeyboardButton Button2 = new InlineKeyboardButton();
+                Button1.setText("Trade");
+                Button2.setText("Live");
+                Button1.setCallbackData("trade");
+                Button2.setCallbackData("live");
+                inlineKeyboardButtonlist.add(Button1);
+                inlineKeyboardButtonlist.add(Button2);
 
-                    inlineButtons.add(inlineKeyboardButtonlist);
-                    inlineKeyboardMarkup.setKeyboard(inlineButtons);
-                    ananlize.setReplyMarkup(inlineKeyboardMarkup);
-                
-              
+                inlineButtons.add(inlineKeyboardButtonlist);
+                inlineKeyboardMarkup.setKeyboard(inlineButtons);
+                ananlize.setReplyMarkup(inlineKeyboardMarkup);
 
                 try {
                     execute(sticker2);
@@ -281,55 +280,52 @@ public class bot extends TelegramLongPollingBot {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-            }
-            else if (data.equals("trade")) {
-               
+            } else if (data.equals("trade")) {
+
                 SendMessage Message = new SendMessage();
                 Message.setChatId(chatId.getChatId().toString());
 
-              
                 BarSeries series = new BuildBarSeries().buildAndAddData();
                 Strategy strategy = analysis.createtrategy(series);
                 TradingRecord tradingRecord = new BaseTradingRecord();
-              
-                for (int i = 0; i < series.getBarCount() ; i++) {
-               
+
+                for (int i = 0; i < series.getBarCount(); i++) {
 
                     Bar newBar = series.getBar(i);
-    
+
                     // try {
-                    //     TimeUnit.SECONDS.sleep(1);
+                    // TimeUnit.SECONDS.sleep(1);
                     // } catch (InterruptedException e1) {
-                    //     // TODO Auto-generated catch block
-                    //     e1.printStackTrace();
+                    // // TODO Auto-generated catch block
+                    // e1.printStackTrace();
                     // }
-                    
+
                     int endIndex = i;
-                    
+
                     System.out.println(endIndex);
                     if (strategy.shouldEnter(endIndex)) {
                         // Our strategy should enter
                         System.out.println("Strategy should ENTER on " + endIndex);
-                        boolean entered = tradingRecord.enter(endIndex, newBar.getClosePrice(), DecimalNum.valueOf(100));
+                        boolean entered = tradingRecord.enter(endIndex, newBar.getClosePrice(),
+                                DecimalNum.valueOf(100));
                         if (entered) {
                             Trade entry = tradingRecord.getLastEntry();
-                            System.out.println("Entered on " + entry.getIndex() + " (price=" + entry.getNetPrice().doubleValue()
-                                    + ", amount=" + entry.getAmount().doubleValue() + ")");
-                            String Entry = "Entered on " + entry.getIndex() + " (price=" + entry.getNetPrice().doubleValue()
-                            + ", amount=" + entry.getAmount().doubleValue() + ")";
+                            System.out.println(
+                                    "Entered on " + entry.getIndex() + " (price=" + entry.getNetPrice().doubleValue()
+                                            + ", amount=" + entry.getAmount().doubleValue() + ")");
+                            String Entry = "Entered on " + entry.getIndex() + " (price="
+                                    + entry.getNetPrice().doubleValue()
+                                    + ", amount=" + entry.getAmount().doubleValue() + ")";
 
-                            Message.setText(Entry);    
+                            Message.setText(Entry);
 
-                           try {
-                            execute(Message);
-                        } catch (TelegramApiException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                            try {
+                                execute(Message);
+                            } catch (TelegramApiException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
 
-
-                            
-                            
                         }
                     } else if (strategy.shouldExit(endIndex)) {
                         // Our strategy should exit
@@ -337,14 +333,15 @@ public class bot extends TelegramLongPollingBot {
                         boolean exited = tradingRecord.exit(endIndex, newBar.getClosePrice(), DecimalNum.valueOf(100));
                         if (exited) {
                             Trade exit = tradingRecord.getLastExit();
-                            System.out.println("Exited on " + exit.getIndex() + " (price=" + exit.getNetPrice().doubleValue()
-                                    + ", amount=" + exit.getAmount().doubleValue() + ")");
+                            System.out.println(
+                                    "Exited on " + exit.getIndex() + " (price=" + exit.getNetPrice().doubleValue()
+                                            + ", amount=" + exit.getAmount().doubleValue() + ")");
 
-                            String Exit ="Exited on " + exit.getIndex() + " (price=" + exit.getNetPrice().doubleValue()
-                            + ", amount=" + exit.getAmount().doubleValue() + ")";
+                            String Exit = "Exited on " + exit.getIndex() + " (price=" + exit.getNetPrice().doubleValue()
+                                    + ", amount=" + exit.getAmount().doubleValue() + ")";
 
                             Message.setText(Exit);
-                            
+
                             try {
                                 execute(Message);
                             } catch (TelegramApiException e) {
@@ -354,22 +351,90 @@ public class bot extends TelegramLongPollingBot {
 
                         }
                     }
-                 
+
+                }
+
+                Num Network = new GrossProfitCriterion().calculate(series, tradingRecord);
+                Message.setText("*GrossProfitCriterion :*" + Network.toString() + money_emoji);
+                Message.enableMarkdown(true);
+                try {
+                    execute(Message);
+                } catch (TelegramApiException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else if (data.equals("live")) {
+                SendMessage Message = new SendMessage();
+                Message.setChatId(chatId.getChatId().toString());
+
+                BarSeries series = new BuildBarSeries().buildAndAddData();
+                Strategy strategy = analysis.createtrategy(series);
+                TradingRecord tradingRecord = new BaseTradingRecord();
+                Bar newBar = series.getLastBar();
+                int endIndex = series.getEndIndex();
+                Timer t = new Timer();
+                EntryOrExit=true;
+                TimerTask tt = new TimerTask() {
+                    @Override
+                    public void run() {
+                        if(EntryOrExit) {
+                        Message.setText("****Waiting for the next hour****");
+                        System.out.println(endIndex);
+                        if (strategy.shouldEnter(endIndex)) {
+                            // Our strategy should enter
+                            System.out.println("Strategy should ENTER on " + endIndex);
+                            boolean entered = tradingRecord.enter(endIndex, newBar.getClosePrice(),
+                                    DecimalNum.valueOf(100));
+                            if (entered) {
+                                Trade entry = tradingRecord.getLastEntry();
+                                System.out.println(
+                                        "Entered on " + entry.getIndex() + " (price="
+                                                + entry.getNetPrice().doubleValue()
+                                                + ", amount=" + entry.getAmount().doubleValue() + ")");
+                                String Entry = "Entered on " + entry.getIndex() + " (price="
+                                        + entry.getNetPrice().doubleValue()
+                                        + ", amount=" + entry.getAmount().doubleValue() + ")";
+
+                                Message.setText(Entry);
+
+                            }
+                        } else if (strategy.shouldExit(endIndex)) {
+                            // Our strategy should exit
+                            System.out.println("Strategy should EXIT on " + endIndex);
+                            boolean exited = tradingRecord.exit(endIndex, newBar.getClosePrice(),
+                                    DecimalNum.valueOf(100));
+                            if (exited) {
+                                Trade exit = tradingRecord.getLastExit();
+                                System.out.println(
+                                        "Exited on " + exit.getIndex() + " (price=" + exit.getNetPrice().doubleValue()
+                                                + ", amount=" + exit.getAmount().doubleValue() + ")");
+
+                                String Exit = "Exited on " + exit.getIndex() + " (price="
+                                        + exit.getNetPrice().doubleValue()
+                                        + ", amount=" + exit.getAmount().doubleValue() + ")";
+
+                                Message.setText(Exit);
+
+                            }
+                        }
+                        try {
+                            execute(Message);
+                        } catch (TelegramApiException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    } else {
+                        t.cancel();
+                        t.purge();
+                     }
+                    };
+                };
+                t.schedule(tt, 1000, 3600000);
 
             }
-            
-            Num Network  = new GrossProfitCriterion().calculate(series,tradingRecord);
-            Message.setText("*GrossProfitCriterion :*"+Network.toString()+money_emoji);
-            Message.enableMarkdown(true);
-            try {
-                execute(Message);
-            } catch (TelegramApiException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
         }
-
-    }}
+    }
 
     @Override
     public String getBotUsername() {
