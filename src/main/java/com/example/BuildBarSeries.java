@@ -91,7 +91,7 @@ public class BuildBarSeries {
       
             Timedata[] dataa = rest.ohlcv_get_latest_timeseries("BINANCE_SPOT_BTC_USDC", period);
 
-            
+          
     
             ZonedDateTime endTime = ZonedDateTime.now();
       
